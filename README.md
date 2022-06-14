@@ -1,2 +1,2 @@
 # CommonWords
-Search common or non common words between two files
+Search common or non common words/phrases between two files
