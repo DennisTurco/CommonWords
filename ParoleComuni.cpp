@@ -1,15 +1,36 @@
+/*
+	Author	-> Dennis Turco 2022
+	Email 	-> dennisturco@gmail.com
+	WebSite	-> https://dennisturco.github.io/
+	GitHub	-> https://github.com/DennisTurco
+*/
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
 
-#define MAX_LENGTH 100
+#define MAX_LENGTH 1000
 #define DIM_MAX 32
 
-void comuni(std::ifstream &f1, std::ifstream &f2, const std::string &nomefile, const char &delimitatore1 = '\n', const char &delimitatore2 = ' ') {
+
+void open_file(std::ifstream &file, char *file_name, const std::string &message = ""){
+	do{
+        std::cout<<message;
+        std::cin.getline(file_name, DIM_MAX);
+        file.open(file_name);
+        if(file.fail()){
+            strcat(file_name, ".txt");
+            file.open(file_name);
+        }
+    } while(file.fail());
+
+}
+
+void common(std::ifstream &f1, std::ifstream &f2, const std::string &file_name, const char &delimitator1 = '\n', const char &delimitator2 = ' ') {
 	char c1, c2;
-	char *parola_file1 = new char[MAX_LENGTH];
-    char *parola_file2 = new char[MAX_LENGTH];
-    int contatore1 = 0, contatore2 = 0;
+	char *word_file1 = new char[MAX_LENGTH];
+    char *word_file2 = new char[MAX_LENGTH];
+    int count1 = 0, count2 = 0;
 	int line = 0;
 	
 	while(!f1.eof()){
@@ -17,55 +38,53 @@ void comuni(std::ifstream &f1, std::ifstream &f2, const std::string &nomefile, c
 		while(!f1.eof()){
 			c1 = f1.get();
 			
-			if(c1 != delimitatore1 && c1 != delimitatore2){ // delimitatore1 solitamente sara' '\n' e delimitatore2 sara' ' '  
-				parola_file1[contatore1] = c1;
-				contatore1++;
+			if(c1 != delimitator1 && c1 != delimitator2){ // delimitator1 will be '\n' and delimitator2 will be ' '  for default
+				word_file1[count1] = c1;
+				count1++;
 			}
 			
 			else break;
 		}
 
-		if (delimitatore2 == NULL) line++;
+		if (delimitator2 == NULL) line++;
 		
-		parola_file1[contatore1] = '\0';
-		contatore1 = 0;
+		word_file1[count1] = '\0';
+		count1 = 0;
 
 		while(!f2.eof()){
 			
 			while(!f2.eof()){
 				c2 = f2.get();
 
-				if(c2 != delimitatore1 && c2 != delimitatore2){
-					parola_file2[contatore2] = c2;
-					contatore2++;
+				if(c2 != delimitator1 && c2 != delimitator2){ // delimitator1 will be '\n' and delimitator2 will be ' '  for default
+					word_file2[count2] = c2;
+					count2++;
 				}
 				else break;
 			}
 			
-			parola_file2[contatore2] = '\0';
-			contatore2 = 0;
+			word_file2[count2] = '\0';
+			count2 = 0;
 			
-			if(strcmp(parola_file1, parola_file2) == 0){
-				if (delimitatore2 == NULL) std::cout<< "line: "<< line<< " -> ";
-				std::cout<<parola_file1<<std::endl;
+			if(strcmp(word_file1, word_file2) == 0){
+				if (delimitator2 == NULL) std::cout<< "line: "<< line<< " -> ";
+				std::cout<<word_file1<<std::endl;
 				break;
 			}
 
 		}
 		
-
-		//va chiuso e riaperto a fine di ogni ciclo in questo modo la lettura del file ricomincia da capo e non continua
 		f2.close();
-		f2.open(nomefile);				
+		f2.open(file_name);				
 	}
 
 }
 
-void non_comuni(std::ifstream &f1, std::ifstream &f2, const std::string &nomefile, const char &delimitatore1 = '\n', const char &delimitatore2 = ' ') {
+void not_common(std::ifstream &f1, std::ifstream &f2, const std::string &file_name, const char &delimitator1 = '\n', const char &delimitator2 = ' ') {
 	char c1, c2;
-	char *parola_file1 = new char[MAX_LENGTH];
-    char *parola_file2 = new char[MAX_LENGTH];
-    int contatore1 = 0, contatore2 = 0;
+	char *word_file1 = new char[MAX_LENGTH];
+    char *word_file2 = new char[MAX_LENGTH];
+    int count1 = 0, count2 = 0;
 	bool trovato = false;
 	int line = 0;
 
@@ -74,18 +93,18 @@ void non_comuni(std::ifstream &f1, std::ifstream &f2, const std::string &nomefil
 		while(!f1.eof()){
 			c1 = f1.get();
 			
-			if(c1 != delimitatore1 && c1 != delimitatore2){
-				parola_file1[contatore1] = c1;
-				contatore1++;
+			if(c1 != delimitator1 && c1 != delimitator2){
+				word_file1[count1] = c1;
+				count1++;
 			}
 			
 			else break;
 		}
 		
-		if (delimitatore2 == NULL) line++;
+		if (delimitator2 == NULL) line++;
 
-		parola_file1[contatore1] = '\0';
-		contatore1 = 0;
+		word_file1[count1] = '\0';
+		count1 = 0;
 		trovato = false;
 	
 		while(!f2.eof()){
@@ -93,17 +112,17 @@ void non_comuni(std::ifstream &f1, std::ifstream &f2, const std::string &nomefil
 			while(!f2.eof()){
 				c2 = f2.get();
 	
-				if(c2 != delimitatore1 && c2 != delimitatore2){
-					parola_file2[contatore2] = c2;
-					contatore2++;
+				if(c2 != delimitator1 && c2 != delimitator2){
+					word_file2[count2] = c2;
+					count2++;
 				}
 				else break;
 			}
 			
-			parola_file2[contatore2] = '\0';
-			contatore2 = 0;
+			word_file2[count2] = '\0';
+			count2 = 0;
 			
-			if(strcmp(parola_file1, parola_file2) == 0){
+			if(strcmp(word_file1, word_file2) == 0){
 				trovato = true;
 				break;
 			}
@@ -111,17 +130,16 @@ void non_comuni(std::ifstream &f1, std::ifstream &f2, const std::string &nomefil
 		}
 		
 		if(trovato == false){
-			if (delimitatore2 == NULL) std::cout<< "line: "<< line<< " -> ";
-			std::cout<<parola_file1<<std::endl;
+			if (delimitator2 == NULL) std::cout<< "line: "<< line<< " -> ";
+			std::cout<<word_file1<<std::endl;
 		}
 		
-		//va chiuso e riaperto a fine di ogni ciclo in questo modo la lettura del file ricomincia da capo e non continua
 		f2.close();
-		f2.open(nomefile);				
+		f2.open(file_name);				
 	}
 }
 
-int main(void){
+int main(int argc, char **argv){
 
     std::ifstream f1;
     std::ifstream f2;
@@ -131,78 +149,26 @@ int main(void){
 	
 	std::cout<<"\tCreated By Dennis Turco\n\n";
 	
-//-------- APERTURA FILE INPUT ---------
-	
-    do{
-        std::cout<<"Inserire Nome Primo File: ";
-        std::cin.getline(nomefile1, DIM_MAX);
-        f1.open(nomefile1);
-        if(f1.fail()){
-            strcat(nomefile1, ".txt");
-            f1.open(nomefile1);
-        }
-    } while(f1.fail());
+//-------- OPEN INPUT FILES ---------
+	open_file(f1, nomefile1, "Enter First File Name: ");
+    open_file(f2, nomefile2, "Enter Second File Name: ");
 
-    do{
-        std::cout<<"Inserire Nome Secondo File: ";
-        std::cin.getline(nomefile2, DIM_MAX);
-        f2.open(nomefile2);
-        if(f2.fail()){
-            strcat(nomefile2, ".txt");
-            f2.open(nomefile2);
-        }
-    } while(f2.fail());
-
-    system("cls");
-	
-
-//-------- OPERAZIONI SU FILE ---------
-    // int scelta;
-	// std::cout<<"Sceglere l'operazione: \n\t1)  Parole Comuni;\n\t2)  Frasi Comuni;\n\t3)  Parole Non Comuni;\n\t4)  Frasi Non Comuni.\nOperazione: ";
-	// std::cin>>scelta;
-	// system("cls");
-	
-	
-//-------- SCELTA SWITCH ---------
-	// switch(scelta){
-	// 	case 1:
-	// 		std::cout<<"Parole Comuni: "<<std::endl;
-	// 		comuni(f1, f2, nomefile2, '\n', ' ');
-	// 		break;
-		
-	// 	case 2:
-	// 		std::cout<<"Frasi Comuni: "<<std::endl;
-	// 		comuni(f1, f2, nomefile2, '\n', NULL); // inserisco NULL perche' voglio usare un solo delimitatore ('\n')
-	// 		break;
-		
-	// 	case 3:
-	// 		std::cout<<"Parole Non Comuni: "<<std::endl;
-	// 		non_comuni(f1, f2, nomefile2, '\n', ' ');
-	// 		break;
-		
-	// 	case 4:
-	// 		std::cout<<"Frasi Non Comuni: "<<std::endl;
-	// 		non_comuni(f1, f2, nomefile2, '\n', NULL); // inserisco NULL perche' voglio usare un solo delimitatore ('\n')
-	// 		break;
-	// }
-
-	std::cout<<"Frasi Comuni: "<<std::endl;
-	comuni(f1, f2, nomefile2, '\n', NULL); // inserisco NULL perche' voglio usare un solo delimitatore ('\n')
+//-------- OPERATIONS ON FILES ---------
+	std::cout<<"Common Phrases: "<<std::endl;
+	common(f1, f2, nomefile2, '\n', NULL); // i insert NULL because i weant to use only one delimitator ('\n')
 	f1.close();
     f2.close();
+	
 	f1.open(nomefile1);
 	f2.open(nomefile2);
-	
 
 	std::cout<<"\n--------------------------------------------------------------------------------------\n\n";
 
-	std::cout<<"Frasi Non Comuni: "<<std::endl;
-	non_comuni(f1, f2, nomefile2, '\n', NULL); // inserisco NULL perche' voglio usare un solo delimitatore ('\n')
+	std::cout<<"Uncommon Phrases: "<<std::endl;
+	not_common(f1, f2, nomefile2, '\n', NULL); // i insert NULL because i weant to use only one delimitator ('\n')
+	f1.close();
+	f2.close();
 
-
-//-------- CHIUSURA FILE ---------
-    f1.close();
-    f2.close();
     system("Pause");
     return 0;
 }
