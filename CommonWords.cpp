@@ -73,11 +73,15 @@ void common(std::ifstream &f1, std::ifstream &f2, const std::string &file_name, 
 			}
 
 		}
-		
+
+		// close
 		f2.close();
 		f2.open(file_name);				
 	}
 
+	// delete
+	delete []word_file1;
+	delete []word_file2;
 }
 
 void not_common(std::ifstream &f1, std::ifstream &f2, const std::string &file_name, const char &delimitator1 = '\n', const char &delimitator2 = ' ') {
@@ -133,13 +137,18 @@ void not_common(std::ifstream &f1, std::ifstream &f2, const std::string &file_na
 			if (delimitator2 == NULL) std::cout<< "line: "<< line<< " -> ";
 			std::cout<<word_file1<<std::endl;
 		}
-		
+
+		// close
 		f2.close();
-		f2.open(file_name);				
+		f2.open(file_name);	
 	}
+
+	// delete
+	delete []word_file1;
+	delete []word_file2;
 }
 
-int main(int argc, char **argv){
+int main(void){
 
     std::ifstream f1;
     std::ifstream f2;
@@ -154,7 +163,7 @@ int main(int argc, char **argv){
     open_file(f2, nomefile2, "Enter Second File Name: ");
 
 //-------- OPERATIONS ON FILES ---------
-	std::cout<<"Common Phrases: "<<std::endl;
+	std::cout<<"\nCommon Phrases: "<<std::endl;
 	common(f1, f2, nomefile2, '\n', NULL); // i insert NULL because i weant to use only one delimitator ('\n')
 	f1.close();
     f2.close();
@@ -164,10 +173,15 @@ int main(int argc, char **argv){
 
 	std::cout<<"\n--------------------------------------------------------------------------------------\n\n";
 
-	std::cout<<"Uncommon Phrases: "<<std::endl;
+	std::cout<<"\nUncommon Phrases: "<<std::endl;
 	not_common(f1, f2, nomefile2, '\n', NULL); // i insert NULL because i weant to use only one delimitator ('\n')
 	f1.close();
 	f2.close();
+
+	// delete
+	delete []nomefile1;
+	delete []nomefile2;
+	
 
     system("Pause");
     return 0;
